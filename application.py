@@ -5,7 +5,7 @@ from validate_email import validate_email
 #from config import Config
 from decorators import require_appkey
 import json
-import pprint
+
 
 #initialize app
 application = Flask(__name__)
@@ -81,8 +81,7 @@ def sendEmail():
                       "Status":"GET requests are not allowed."
                     }#no get requests
         responseList.append(response)
-       
-    pprint.pprint(json.dumps(responseList))
+   
     return (json.dumps(responseList))
     
 
