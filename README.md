@@ -15,6 +15,6 @@
 ``` sh
 application.py 
 ```
->API details are mentioned in the Notification_API.word file.
+## API details are mentioned in the Rest API Documentation.word file.
 
 
