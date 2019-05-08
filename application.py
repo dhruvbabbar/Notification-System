@@ -1,21 +1,29 @@
+#flask modules
 from flask import Flask,render_template,request
+
+#flask mail module
 from flask_mail import Mail
 from flask_mail import Message 
+
+#email address validator
 from validate_email import validate_email
-#from config import Config
+
 from decorators import require_appkey
 import json
-
+import os
 
 #initialize app
 application = Flask(__name__)
+
 #import configurations
 application.config.from_pyfile('config.cfg')
+
+application.secret_key=os.urandom(24)
 #initialize mail for the application
 mail = Mail(application)
 
 #POST request for sending email with a decorator to check for API key.
-@application.route('/sendEmail',methods=['POST','GET'])
+@application.route('/sendEmail',methods=['POST'])
 @require_appkey
 def sendEmail(): 
     responseList= []
@@ -23,7 +31,7 @@ def sendEmail():
         
         defaultMessage="This is to notify you."
         defaultSubject="Notification"
-        emailData = request.json.get('Email_Data')
+        emailData = request.json.get('data')
         for row in emailData:
             
             #and validate_email(row['to'])
@@ -31,8 +39,8 @@ def sendEmail():
                 emailTo=row['to']
                 
                 if validate_email(emailTo):                   
-                    if 'message' in row:
-                        message=row['message']
+                    if 'messageBody' in row:
+                        message=row['messageBody']
                     else:
                         message=defaultMessage
 
@@ -50,41 +58,33 @@ def sendEmail():
                     try:
                         mail.send(msg)
                     except Exception as err:
-                         response={"Email To":emailTo,
+                         response={"To":emailTo,
                                     "Code":"301",
                                     "Status":"Not Delivered"
                                     }#exception
                     else:
-                        response={"Email To":emailTo,
+                        response={"To":emailTo,
                                     "Code":"200",
                                     "Status":"Delivered"
                                     }#success
                     responseList.append(response)
                 else:
-                    response={"Email To":emailTo,
+                    response={"To":emailTo,
                             "Code":"303",
                             "Status":"Not Delivered"
                             }#no email id present
                     responseList.append(response)
                     
             else:                
-                response={"Email To":"None",
+                response={"To":"None",
                             "Code":"302",
                             "Status":"Not Delivered"
                             }#no email id present
                 responseList.append(response)
                
 
-    else:
-        response={  "Email To":"N.A",
-                    "Code":"315",
-                      "Status":"GET requests are not allowed."
-                    }#no get requests
-        responseList.append(response)
    
     return (json.dumps(responseList))
-    
-
 
 if __name__ == "__main__":
    
