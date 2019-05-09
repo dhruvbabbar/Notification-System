@@ -3,7 +3,7 @@
 >This repository has a structure of a generic Notification Email System . 
 >
 
-## To setup dev environment (windows- CMD)
+## To setup dev environment (windows- CMD Python 3.7.0)
 ```
  virtualenv env
  cd env/bin/activate
