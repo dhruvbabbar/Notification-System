@@ -1,5 +1,6 @@
 from functools import wraps
 from flask import request, abort
+import json
 
 #error code for invalid API key
 from enumCodes import Codes
@@ -10,12 +11,14 @@ def require_appkey(view_function):
     def decorated_function(*args, **kwargs):
         headers = request.headers
         auth = headers.get("X-Api-Key")
+        
         if auth == 'db1Hp-1Ad2sP-0tl0II-8xh8s7-aaGk8':
+            print("good key")
             return view_function(*args, **kwargs)
         else:
-            response={
+            response=[{
                         "Code":Codes.unauthorised.value,
                         "Message":"Invalid API key"
-                        }#success    
-            return response
+                        }]#success    
+            return json.dumps(response)
     return decorated_function
