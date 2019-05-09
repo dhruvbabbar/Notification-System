@@ -3,8 +3,8 @@
 >This repository has a structure of a generic Notification Email System . 
 >
 
-## To setup dev environment
-```sh
+## To setup dev environment (windows- CMD)
+```
  virtualenv env
  cd env/bin/activate
  pip install -r requirements.txt
@@ -12,7 +12,7 @@
 =======
 
 ## Run
-``` sh
+``` 
 application.py 
 ```
 ## API details are mentioned in the Rest API Documentation.word file.
